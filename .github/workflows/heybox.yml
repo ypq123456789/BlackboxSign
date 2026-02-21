@@ -23,4 +23,6 @@ jobs:
       - name: Run Script
         env:
           BLACKBOX_COOKIE: ${{ secrets.BLACKBOX_COOKIE }}
-        run: node BlackBoxSign.js
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+        run: node run.js
