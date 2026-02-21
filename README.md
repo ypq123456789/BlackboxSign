@@ -9,6 +9,39 @@
 - **Telegram 推送**：运行结束后，自动将执行日志推送到指定的 Telegram 账号或群组。
 - **零侵入设计**：使用包裹脚本 (`run.js`) 运行核心逻辑，不修改原混淆脚本，避免触发防篡改机制。
 
+## Cookie配置说明
+
+脚本支持多账号签到，Cookie 格式如下：
+
+```
+heybox_id#pkey=xxxxxx;x_xhh_tokenid=xxxxxx&heybox_id#pkey=xxxxxx;x_xhh_tokenid=xxxxxx
+```
+
+- `heybox_id`：在请求参数中获取（如 `user_id` 字段）。
+- `pkey`、`x_xhh_tokenid`：在请求头的 Cookie 字段中获取。
+
+只需保留这三个关键内容，按如下格式拼接：
+
+- 单账号示例：
+  ```
+  export BLACKBOX_COOKIE="123456#pkey=abcdef;x_xhh_tokenid=ghijkl"
+  ```
+- 多账号示例（用 `&` 分隔）：
+  ```
+  export BLACKBOX_COOKIE="123456#pkey=abcdef;x_xhh_tokenid=ghijkl&654321#pkey=xyz;x_xhh_tokenid=mnopqr"
+  ```
+
+> 注：GitHub Actions 配置 Secrets 时，直接填上述格式即可。
+
+## 获取 Cookie 方法
+
+1. 手机上安装抓包工具（如 HttpCanary、Stream 等）。
+2. 打开小黑盒 App，进行任意操作（如刷新首页、点击签到）。
+3. 在抓包工具中找到请求域名为 `api.xiaoheihe.cn` 的请求。
+4. 在请求参数中找到 `heybox_id`（或 `user_id`）。
+5. 在请求头（Headers）中找到 `cookie` 字段，复制其中的 `pkey` 和 `x_xhh_tokenid`。
+6. 按上述格式拼接。
+
 ## 使用方法 (GitHub Actions)
 
 推荐使用 GitHub Actions 进行自动化部署，无需自己准备服务器。
@@ -21,7 +54,9 @@
 1. 手机上安装抓包工具（如 HttpCanary、Stream 等）。
 2. 打开小黑盒 App，进行任意操作（如刷新首页、点击签到）。
 3. 在抓包工具中找到请求域名为 `api.xiaoheihe.cn` 的请求。
-4. 在请求头（Headers）中找到 `cookie` 字段，复制其完整内容。
+4. 在请求参数中找到 `heybox_id`（或 `user_id`）。
+5. 在请求头（Headers）中找到 `cookie` 字段，复制其中的 `pkey` 和 `x_xhh_tokenid`。
+6. 按上述格式拼接。
 
 ### 3. 配置 GitHub Secrets
 进入你 Fork 后的仓库，点击 **Settings** -> **Secrets and variables** -> **Actions**，点击 **New repository secret** 添加以下变量：
