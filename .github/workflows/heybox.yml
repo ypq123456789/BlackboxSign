@@ -1,0 +1,26 @@
+name: 小黑盒自动签到
+
+on:
+  schedule:
+    - cron: '3 1,13 * * *' # UTC时间，对应北京时间 9:03 和 21:03
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install axios
+
+      - name: Run Script
+        env:
+          BLACKBOX_COOKIE: ${{ secrets.BLACKBOX_COOKIE }}
+        run: node heybox.js
