@@ -2,8 +2,8 @@ name: 小黑盒自动签到
 
 on:
   schedule:
-    - cron: '3 1,13 * * *' # UTC时间，对应北京时间 9:03 和 21:03
-  workflow_dispatch:
+    - cron: '3 1,13 * * *' # UTC时间，对应北京时间每天 9:03 和 21:03 执行
+  workflow_dispatch: # 允许手动点击按钮触发执行
 
 jobs:
   build:
@@ -23,4 +23,4 @@ jobs:
       - name: Run Script
         env:
           BLACKBOX_COOKIE: ${{ secrets.BLACKBOX_COOKIE }}
-        run: node heybox.js
+        run: node BlackBoxSign.js
